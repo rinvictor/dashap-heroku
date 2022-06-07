@@ -85,7 +85,7 @@ def render_page_content(pathname):
     if pathname == "/":
         return html.Div(
             children=[
-                html.H1(children='My Final Project Degree',
+                html.H1(children='My Final Degree Project',
                         className="header-title"),
                 html.H3(children='Develop of an automation and monitoring distributed system for a greenhouse',
                         className="header-description"),
@@ -95,7 +95,7 @@ def render_page_content(pathname):
         ), html.Div(
             children=[
                 html.P("This is a data visualization web app developed as a part of the system that has been built as "
-                       "a final project degree for the Telematics Engineering degree. The project consists of an "
+                       "a final degree project for the Telematics Engineering degree. The project consists of an "
                        "autonomous distributed system for monitoring and care of a greenhouse."),
                 html.P(children=["This app is based on python, dash and plotly for the data visualization. All data is "
                                  "retrieved from the different sensors and processed using a Raspberry Pi 3B+ and an "
