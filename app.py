@@ -18,13 +18,14 @@ def getdataframe(sensor_type):
     df = pd.DataFrame(list(results))
     return df
 
+
 def getcontrollerdataframe(controller_type):
     client = MongoClient(db_credentials.url, db_credentials.port)
     db = client["greenhouseDB"]
     collection = db['controllers_data']
     results = collection.find({'type': controller_type})
     df = pd.DataFrame(list(results))
-    return df 
+    return df
 
 
 app = dash.Dash(name=__name__, assets_folder='assets', external_stylesheets=[dbc.themes.SANDSTONE])
@@ -85,7 +86,7 @@ def render_page_content(pathname):
     if pathname == "/":
         return html.Div(
             children=[
-                html.H1(children='My Final Degree Project',
+                html.H1(children='My Final Project Degree',
                         className="header-title"),
                 html.H3(children='Develop of an automation and monitoring distributed system for a greenhouse',
                         className="header-description"),
@@ -95,7 +96,7 @@ def render_page_content(pathname):
         ), html.Div(
             children=[
                 html.P("This is a data visualization web app developed as a part of the system that has been built as "
-                       "a final degree project for the Telematics Engineering degree. The project consists of an "
+                       "a final project degree for the Telematics Engineering degree. The project consists of an "
                        "autonomous distributed system for monitoring and care of a greenhouse."),
                 html.P(children=["This app is based on python, dash and plotly for the data visualization. All data is "
                                  "retrieved from the different sensors and processed using a Raspberry Pi 3B+ and an "
@@ -107,7 +108,8 @@ def render_page_content(pathname):
                        "autonomous control of the greenhouse and a Telegram bot that is used not only for monitoring "
                        "the whole system but also to obtain real-time data as well as getting it from the database, "
                        "this bot is deployed in the Raspberry Pi 3B+."),
-                html.P("If you are interested you can have a look to the documentation section to learn more about it."),
+                html.P(
+                    "If you are interested you can have a look to the documentation section to learn more about it."),
                 html.Hr(),
                 html.H5(children=["Developed by: ",
                                   html.A(
@@ -126,6 +128,11 @@ def render_page_content(pathname):
 
     elif pathname == "/amb_temp_fig":
         df = getdataframe("ambient temperature")
+        # By defect values
+        yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
+
         options = []
         for c in df["sensorID"].unique():
             options.append({"label": c, "value": c})
@@ -232,7 +239,7 @@ def render_page_content(pathname):
             ),
             html.H5("Ground humidity graph.")
         ])
-    
+
     elif pathname == "/irr_data_fig":
         df = getcontrollerdataframe("irrigation")
         options = []
@@ -259,7 +266,7 @@ def render_page_content(pathname):
             ),
             html.H5("Irrigation data graph.")
         ])
-        
+
     elif pathname == "/documentation":
         html_plot = html.Div(
             html.H1('Documentation')
@@ -286,10 +293,7 @@ def render_page_content(pathname):
 def update_output(start_date, end_date, value):
     df = getdataframe("ambient temperature")
     if not value and not start_date and not end_date:
-        # By defect values
-        yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
-        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
-        df = du.date_filter(df, start_date=yesterday, end_date=today)
+        return dash.no_update
     if start_date or end_date:
         df = du.date_filter(df, start_date, end_date)
     if value and len(value) > 0:
@@ -384,7 +388,6 @@ def update_output(start_date, end_date, value):
 
     fig = figures.create_irrigation_data_fig(df)
     return fig
-
 
 
 if __name__ == '__main__':
