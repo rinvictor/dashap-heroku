@@ -129,7 +129,7 @@ def render_page_content(pathname):
     elif pathname == "/amb_temp_fig":
         df = getdataframe("ambient temperature")
         # By defect values
-        yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+        yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
         today = datetime.strftime(datetime.now(), '%Y-%m-%d')
         df = du.date_filter(df, start_date=yesterday, end_date=today)
 
@@ -161,6 +161,10 @@ def render_page_content(pathname):
     elif pathname == "/amb_hum_fig":
 
         df = getdataframe("ambient humidity")
+        yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
+
         options = []
         for c in df["sensorID"].unique():
             options.append({"label": c, "value": c})
@@ -188,6 +192,9 @@ def render_page_content(pathname):
 
     elif pathname == "/ground_temp_fig":
         df = getdataframe("ground temperature")
+        yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         options = []
         for c in df["sensorID"].unique():
             options.append({"label": c, "value": c})
@@ -215,6 +222,9 @@ def render_page_content(pathname):
 
     elif pathname == "/ground_hum_fig":
         df = getdataframe("ground humidity")
+        yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         options = []
         for c in df["sensorID"].unique():
             options.append({"label": c, "value": c})
@@ -242,6 +252,9 @@ def render_page_content(pathname):
 
     elif pathname == "/irr_data_fig":
         df = getcontrollerdataframe("irrigation")
+        yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         options = []
         for c in df["controllerID"].unique():
             options.append({"label": c, "value": c})
@@ -292,11 +305,17 @@ def render_page_content(pathname):
 )
 def update_output(start_date, end_date, value):
     df = getdataframe("ambient temperature")
+    yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     if not value and not start_date and not end_date:
-        return dash.no_update
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
     if start_date or end_date:
         df = du.date_filter(df, start_date, end_date)
-    if value and len(value) > 0:
+    if value and len(value) > 0 and start_date and end_date:
+        df = du.date_filter(df, start_date, end_date)
+        df = df[df['sensorID'].isin(value)]
+    if value and not start_date:
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         df = df[df['sensorID'].isin(value)]
 
     fig = figures.create_temperature_fig(df)
@@ -312,15 +331,17 @@ def update_output(start_date, end_date, value):
 def update_output(start_date, end_date, value):
     # If no filter has been selected
     df = getdataframe("ambient humidity")
+    yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     if not value and not start_date and not end_date:
-        yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
-        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
         df = du.date_filter(df, start_date=yesterday, end_date=today)
-    # Check if any date has been checked
     if start_date or end_date:
         df = du.date_filter(df, start_date, end_date)
-    # Check if any sensor has been selected
-    if value and len(value) > 0:
+    if value and len(value) > 0 and start_date and end_date:
+        df = du.date_filter(df, start_date, end_date)
+        df = df[df['sensorID'].isin(value)]
+    if value and not start_date:
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         df = df[df['sensorID'].isin(value)]
 
     fig = figures.create_humidity_fig(df)
@@ -335,13 +356,17 @@ def update_output(start_date, end_date, value):
 )
 def update_output(start_date, end_date, value):
     df = getdataframe("ground temperature")
+    yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     if not value and not start_date and not end_date:
-        yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
-        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
         df = du.date_filter(df, start_date=yesterday, end_date=today)
     if start_date or end_date:
         df = du.date_filter(df, start_date, end_date)
-    if value and len(value) > 0:
+    if value and len(value) > 0 and start_date and end_date:
+        df = du.date_filter(df, start_date, end_date)
+        df = df[df['sensorID'].isin(value)]
+    if value and not start_date:
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         df = df[df['sensorID'].isin(value)]
 
     fig = figures.create_temperature_fig(df)
@@ -356,13 +381,17 @@ def update_output(start_date, end_date, value):
 )
 def update_output(start_date, end_date, value):
     df = getdataframe("ground humidity")
+    yesterday = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     if not value and not start_date and not end_date:
-        yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
-        today = datetime.strftime(datetime.now(), '%Y-%m-%d')
         df = du.date_filter(df, start_date=yesterday, end_date=today)
     if start_date or end_date:
         df = du.date_filter(df, start_date, end_date)
-    if value and len(value) > 0:
+    if value and len(value) > 0 and start_date and end_date:
+        df = du.date_filter(df, start_date, end_date)
+        df = df[df['sensorID'].isin(value)]
+    if value and not start_date:
+        df = du.date_filter(df, start_date=yesterday, end_date=today)
         df = df[df['sensorID'].isin(value)]
 
     fig = figures.create_humidity_fig(df)
@@ -378,7 +407,7 @@ def update_output(start_date, end_date, value):
 def update_output(start_date, end_date, value):
     df = getcontrollerdataframe("irrigation")
     if not value and not start_date and not end_date:
-        start_date = datetime.strftime(datetime.now() - timedelta(4), '%Y-%m-%d')
+        start_date = datetime.strftime(datetime.now() - timedelta(7), '%Y-%m-%d')
         today = datetime.strftime(datetime.now(), '%Y-%m-%d')
         df = du.date_filter(df, start_date=start_date, end_date=today)
     if start_date or end_date:
