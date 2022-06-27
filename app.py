@@ -282,8 +282,40 @@ def render_page_content(pathname):
 
     elif pathname == "/documentation":
         html_plot = html.Div(
-            html.H1('Documentation')
+            html.H1('Documentation')),
+        html.Div(
+            children=[
+                html.H2("In this page you can have a look to the documentation section... "),
+                html.P(children=["Any information you need to know or any relevant updates will be published in the "
+                                 "github repository. You can check out this repository ",
+                                 html.A("here", href="https://github.com/rinvictor/TFG", target="_blank")]),
+                html.P(children=["This is an open-source project developed under the GNU General Public License v3.0 for "
+                                 "further information you can click",
+                                 html.A("here", href="https://github.com/rinvictor/TFG/blob/main/LICENSE")])])
+
+        return html.Div(
+            children=[
+                html.H1(children='Documentation',
+                        className="header-title"),
+                html.H3(children='In this page you can have a look to the documentation section...',
+                        className="header-description"),
+                html.Hr()
+            ],
+            className='header'
+        ), html.Div(
+            children=[
+                html.P(children=["Any information you need to know or any relevant updates will be published in the "
+                                 "Github repository. You can check out this repository ",
+                                 html.A("here", href="https://github.com/rinvictor/TFG", target="_blank")]),
+                html.P(children=["This is an open-source project developed under the GNU General Public License v3.0, "
+                                 "for further information you can click ",
+                                 html.A("here", href="https://github.com/rinvictor/TFG/blob/main/LICENSE", target="_blank")]),
+
+                html.P(children=["If you have any questions or suggestions, please do not hesitate to contact me. "
+                                 "And remember... All pull request are very welcome! "])
+                ]
         )
+
 
     else:
         # If the user tries to reach a different page, return a 404 message
