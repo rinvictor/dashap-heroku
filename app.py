@@ -98,13 +98,13 @@ def render_page_content(pathname):
                 html.P("This is a data visualization web app developed as a part of the system that has been built as "
                        "a final project degree for the Telematics Engineering degree. The project consists of an "
                        "autonomous distributed system for monitoring and care of a greenhouse."),
-                html.P(children=["This app is based on python, dash and plotly for the data visualization. All data is "
+                html.P(children=["This app is based on Python, Dash and Plotly for the data visualization. All data is "
                                  "retrieved from the different sensors and processed using a Raspberry Pi 3B+ and an "
                                  "Arduino and sended to a MongoDB database hosted in a Docker container in the ETSIT "
                                  "labs from Universidad Rey Juan Carlos. You can have a look to their webpage ",
                                  html.A("here", href="https://labs.etsit.urjc.es/", target="_blank")]),
                 html.P("The project has four clearly differentiated main parts, this visualization web application "
-                       "deployed using Heroku, the aforementioned data collection system, a python app for the "
+                       "deployed using Heroku, the aforementioned data collection system, a Python app for the "
                        "autonomous control of the greenhouse and a Telegram bot that is used not only for monitoring "
                        "the whole system but also to obtain real-time data as well as getting it from the database, "
                        "this bot is deployed in the Raspberry Pi 3B+."),
@@ -281,18 +281,6 @@ def render_page_content(pathname):
         ])
 
     elif pathname == "/documentation":
-        html_plot = html.Div(
-            html.H1('Documentation')),
-        html.Div(
-            children=[
-                html.H2("In this page you can have a look to the documentation section... "),
-                html.P(children=["Any information you need to know or any relevant updates will be published in the "
-                                 "github repository. You can check out this repository ",
-                                 html.A("here", href="https://github.com/rinvictor/TFG", target="_blank")]),
-                html.P(children=["This is an open-source project developed under the GNU General Public License v3.0 for "
-                                 "further information you can click",
-                                 html.A("here", href="https://github.com/rinvictor/TFG/blob/main/LICENSE")])])
-
         return html.Div(
             children=[
                 html.H1(children='Documentation',
@@ -307,12 +295,14 @@ def render_page_content(pathname):
                 html.P(children=["Any information you need to know or any relevant updates will be published in the "
                                  "Github repository. You can check out this repository ",
                                  html.A("here", href="https://github.com/rinvictor/TFG", target="_blank")]),
+                html.P(children=["The Telegram bot developed as a part of this project is available in ",
+                                 html.A("t.me/greenhouseTFGBot", href="t.me/greenhouseTFGBot")]),
                 html.P(children=["This is an open-source project developed under the GNU General Public License v3.0, "
                                  "for further information you can click ",
                                  html.A("here", href="https://github.com/rinvictor/TFG/blob/main/LICENSE", target="_blank")]),
 
                 html.P(children=["If you have any questions or suggestions, please do not hesitate to contact me. "
-                                 "And remember... All pull request are very welcome! "])
+                                 "And remember... All pull requests are very welcome! "])
                 ]
         )
 
